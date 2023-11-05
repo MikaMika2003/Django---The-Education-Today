@@ -1,0 +1,28 @@
+{% extends "teachers/base.html" %}
+{% load static %}
+
+<title>
+    {% block title %}
+        Delete Quiz
+    {% endblock %}
+</title>
+
+{% block content %}
+
+<br/>
+<div class="container my-2">
+    <h1>Delete Quiz</h1>
+    <br></br>
+    <h3>Delete: {{ object.title }}</h3>
+
+    <br/>
+    <div class="form-group">
+        <form method="POST">
+            {% csrf_token %}
+            <strong>Are you sure?</strong><br/><br/>
+            <button type="submit" class="btn btn-secondary">Delete Quiz!</button>
+    </div>
+
+</div>
+
+{% endblock %}

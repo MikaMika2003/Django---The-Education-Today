@@ -1,0 +1,27 @@
+{% extends "teachers/base.html" %}
+
+<title>
+    {% block title %}
+        Edit Post
+    {% endblock %}
+</title>
+
+{% block content %}
+<br/>
+<div class="container my-2">
+{% if user.id == object.author.id %}
+    <h1>Update Post</h1>
+    <br></br>
+    <div class="form-group">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            {{ form.as_p }} 
+            <button type="submit" class="btn btn-secondary">Update</button>
+    </div>
+{% else %}
+    You cannot edit this post!!
+
+{% endif %}
+</div>
+{% endblock %}

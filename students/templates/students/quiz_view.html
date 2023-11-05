@@ -1,0 +1,87 @@
+{% extends 'students/base.html' %}
+
+<title>
+    {% block title %}
+        Quiz
+    {% endblock %}
+</title>
+
+{% block content %}
+
+<div class="container my-2">
+    <div id="contentwrapper">
+        <div id="content">
+        
+            {% if grade %}
+                <div id="grade-wrapper">
+                    <div class="container ">
+            
+                        <div class="card-columns" style="padding: 10px; margin: 20px;">
+                            <div class="card" align="centre " style="width: 32rem; border:5px black solid">
+                                <div class="card-body">
+                    
+                                    <p class="card-text">Percentage: {{ grade.grade }}%</p>
+
+                                    {% for message in messages %}
+                                        <p class="card-text">{{ message }}</p>
+                                    {% endfor %}
+
+                                    <h3>You have 0 attemps left.</h3>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+
+
+
+                    <!--<h2>Your Grade for {{ quiz.title}}: <br>
+                        {{grade.grade}}%
+                        <br/>
+                        You have 0 attemps left.
+                    </h2>-->
+                </div>
+            {% else %}
+                <div id="wrapper">
+                    <h2>{{quiz.title}}</h2>
+                    <div id="quiz-wrapper">
+                        <form id="form" method="post">
+                            {% csrf_token %}
+                            {% for question in questions %}
+                            <div class="questions">
+                                <h3>Question {{ forloop.counter }}</h3>
+                                <p>{{ question.question_text }}</p>
+                                {% if question.op1 %}
+                                    <label>
+                                        <input type="radio" name="{{question.id}}" value="1"> {{ question.op1 }}
+                                    </label><br>
+                                {% endif %}
+                                {% if question.op2 %}
+                                    <label>
+                                        <input type="radio" name="{{question.id}}" value="2"> {{ question.op2 }}
+                                    </label><br>
+                                {% endif %}
+                                {% if question.op3 %}
+                                    <label>
+                                        <input type="radio" name="{{question.id}}" value="3"> {{ question.op3 }}
+                                    </label><br>
+                                {% endif %}
+                                {% if question.op4 %}
+                                    <label>
+                                        <input type="radio" name="{{question.id}}" value="4"> {{ question.op4 }}
+                                    </label><br>
+                                {% endif %}
+                            </div>
+                            <hr>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                        </form>
+                        <br/>
+                    </div>
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

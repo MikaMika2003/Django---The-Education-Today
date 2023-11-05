@@ -1,0 +1,28 @@
+{% extends 'students/base.html' %}
+
+<title>
+    {% block title %}
+        Quiz List
+    {% endblock %}
+</title>
+
+{% block content %}
+<div class="container my-2">
+    <div id="contentwrapper">
+        <div id="content">
+            <h2>Quizzes</h2>
+            <br/>
+            <div id="posts-wrapper">
+                {% for quiz in quizzes %}
+                <div class="quizzes" data-class-id= "{{ quiz.id }}">
+                    <strong><a href="{% url 'students:quiz_view' quiz.id %}">{{ quiz.title }}</a></strong> 
+                    - {{ quiz.date_added }}
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

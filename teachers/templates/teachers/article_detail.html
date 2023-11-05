@@ -1,0 +1,64 @@
+{% extends "teachers/base.html" %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+<br/>
+<div class="container my-2">
+
+<h1>{{ object.title }}</h1>
+<small>By: 
+    {{ object.author.first_name }} 
+    {{ object.author.last_name }} - 
+    {{ object.post_date }}
+    
+    {% if user.id == object.author.id %}
+        - <a href="{% url 'teachers:update_post' object.pk %}">(Edit)</a> 
+        <a href="{% url 'teachers:delete_post' object.pk %}">(Delete)</a> 
+    {% endif %}
+
+</small><br/>
+<hr>
+<br/>
+
+{{ object.body |safe }}
+
+{% if object.file  %}
+<br/><br/>
+<hr>
+<br/>
+<h5>Attached Files:<h5>
+    <br/> <li>
+    <small><a href="{{ object.file.url }}"> {{ object.file.name }} </a></small>
+    </li>
+{% endif %}
+
+<br/><br/>
+<hr>
+<br/>
+<h1>Replies</h1>
+{% if not object.replies.all %}
+<br/>
+No Replies - <a href="{% url 'teachers:add_reply' object.pk %}">Add Reply<a/>
+
+{% else %}
+<a href="{% url 'teachers:add_reply' object.pk %}">Add Reply<a/>
+<hr>
+<br/>
+    {% for reply in object.replies.all %}
+        <strong>
+            {{ reply.name }} - {{ reply.date_added }}
+        </strong>
+        <br/>
+        {{ reply.body }}
+        <br/><br/>
+        <hr>
+    {% endfor %}
+
+{% endif %}
+
+
+</div>
+{% endblock %}

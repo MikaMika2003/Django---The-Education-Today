@@ -1,0 +1,40 @@
+{% extends "teachers/base.html" %}
+
+<title>
+    {% block title %}
+        Posts
+    {% endblock %}
+</title>
+
+
+{% block content %}
+<br/>
+<div class="container my-2">
+
+    <h1>Posts</h1>
+    <br/>
+
+    <a href="{% url 'teachers:add_post' %}" class="btn btn-secondary">Add Post</a>
+    <br/>
+
+    <ul>
+        <br/>
+    {% for post in object_list %}
+        
+            <strong><a href="{% url 'teachers:article-detail' post.pk %}">{{ post.title }}</a></strong> -
+            {{ post.author.first_name }} 
+            {{ post.author.last_name }} - {{ post.post_date }} <small>
+                
+            
+                {% if user.id == post.author.id %} 
+                - <a href="{% url 'teachers:update_post' post.pk %}">(Edit)</a> 
+                <a href="{% url 'teachers:delete_post' post.pk %}">(Delete)</a> 
+                {% endif  %}
+
+            </small><br/>
+            {{ post.snippet }}
+        <hr>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "teachers/base.html" %}
+
+<title>
+    {% block title %}
+        Quiz List
+    {% endblock %}
+</title>
+
+{% block content %}
+
+<div class="container my-2">
+
+    <br/>
+
+    <div id="contentwrapper">
+        <div id="content">
+            <h2>Quizzes</h2>
+            <br/>
+            <div id="coursediv">
+                <div class="form-wrapper">
+                    <form action="" method="POST" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        <label for="message" class="textarea-label">Create A Quiz</label>
+                        <input
+                            type="text"
+                            name="title"
+                            id="subject"
+                            placeholder="Title"
+                            class="textarea-input"
+                        />
+                        <button class="btn btn-secondary">Create Quiz</button>
+                    </form>
+                </div>
+            </div>
+            <div id="posts-wrapper">
+                <hr>
+                {% for quiz in quizzes %}
+                <div class="quizzes" data-class-id= "{{ quiz.id }}">
+                    <strong><a href="{% url 'teachers:quizzes' quiz.id %}">{{ quiz.title }}</a></strong> 
+                    - {{ quiz.date_added }}
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

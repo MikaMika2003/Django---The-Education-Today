@@ -1,0 +1,117 @@
+{% extends "teachers/base.html" %}
+
+<title>
+    {% block title %}
+        Quizzes
+    {% endblock %}
+</title>
+
+{% block content %}
+<div class="container my-2">
+    <br/>
+
+    <div id="coursediv">
+        <div class="form-wrapper">
+            <form action="" method="POST" enctype="multipart/form-data" >
+                {% csrf_token %}
+                <label for="message" class="textarea-label"> Add Question</label>
+                
+                <div class="textarea">
+                    <textarea
+                        rows="4"
+                        name="question_text"
+                        id="message"
+                        placeholder="Enter Question..."
+                        class="textarea-input"
+                    ></textarea>
+                </div> <br/>
+                <input
+                    type="text"
+                    name="op1"
+                    id="subject"
+                    placeholder="Option 1"
+                    class="textarea-input"
+                    
+                />
+                <br/><br/>
+                <input
+                    type="text"
+                    name="op2"
+                    id="subject"
+                    placeholder="Option 2"
+                    class="textarea-input"
+                /><br/><br/>
+                <input
+                    type="text"
+                    name="op3"
+                    id="subject"
+                    placeholder="Option 3"
+                    class="textarea-input"
+                /><br/><br/>
+                <input
+                    type="text"
+                    name="op4"
+                    id="subject"
+                    placeholder="Option 4"
+                    class="textarea-input"
+                /><br/><br/>
+                <label for="ans">Correct Answer:</label>
+                <select id="ans" name="ans" required>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                    <option value="4">Option 4</option>
+                </select>
+                <br/><br/>
+                <button class="btn btn-secondary">Add Question</button>
+                <br/><br/>
+            </form>
+    
+            <hr>
+        </div>
+    </div>
+        <br/>
+        <div id="contentwrapper">
+            <div id="content">
+                <div id="wrapper">
+                    <h2>{{quiz.title}} Questions</h2>
+                    <div id="quiz-wrapper">
+                        <form method="post">
+                            {% csrf_token %}
+                            {% for question in questions %}
+                                <div class="questions">
+                                    <h3>Question {{ forloop.counter }}</h3>
+                                    <p>{{ question.question_text }}</p>
+                                    {% if question.op1 %}
+                                        <label>
+                                            <input type="radio" name="answer" value="1"> {{ question.op1 }}
+                                        </label><br>
+                                    {% endif %}
+                                    {% if question.op2 %}
+                                        <label>
+                                            <input type="radio" name="answer" value="2"> {{ question.op2 }}
+                                        </label><br>
+                                    {% endif %}
+                                    {% if question.op3 %}
+                                        <label>
+                                            <input type="radio" name="answer" value="3"> {{ question.op3 }}
+                                        </label><br>
+                                    {% endif %}
+                                    {% if question.op4 %}
+                                        <label>
+                                            <input type="radio" name="answer" value="4"> {{ question.op4 }}
+                                        </label><br>
+                                    {% endif %}
+                                </div>
+
+                            {% endfor %}
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+</div>
+
+{% endblock %}

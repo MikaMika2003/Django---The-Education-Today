@@ -1,0 +1,27 @@
+{% extends "students/base.html" %}
+
+<title>
+    {% block title %}
+        Courses
+    {% endblock %}
+</title>
+
+{% block content %}
+<br/>
+<div class="container my-2">
+
+    <h1>Courses</h1>
+
+    {% for student_course in courses %}
+        <strong><a href="{% url 'students:course_detail' student_course.course.id %}">{{ student_course.course.name }}</a></strong> - 
+        {{ student_course.course.subject_name }}
+        <br/>
+        <strong>Instructor:</strong> {{ student_course.course.teacher }}
+        <br/><br/>
+
+    {% endfor %}
+
+</div>
+
+
+{%endblock %}

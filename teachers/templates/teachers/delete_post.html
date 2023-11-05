@@ -1,0 +1,29 @@
+{% extends "teachers/base.html" %}
+
+<title>
+    {% block title %}
+        Delete Post
+    {% endblock %}
+</title>
+
+{% block content %}
+<br/>
+<div class="container my-2">
+{% if user.id == object.author.id %}
+    <h1>Delete Post</h1>
+    <br></br>
+    <h3>Delete: {{ object.title }}</h3>
+
+    <br/>
+    <div class="form-group">
+        <form method="POST">
+            {% csrf_token %}
+            <strong>Are you sure?</strong><br/><br/>
+            <button type="submit" class="btn btn-secondary">Delete Post!</button>
+    </div>
+{% else %}
+    You cannot edit this post!!
+
+{% endif %}
+</div>
+{% endblock %}

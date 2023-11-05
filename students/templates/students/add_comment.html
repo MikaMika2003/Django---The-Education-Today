@@ -1,0 +1,29 @@
+{% extends "students/base.html" %}
+
+<title>
+    {% block title %}
+        Comment On Post
+    {% endblock %}
+</title>
+
+{% block content %}
+<br/>
+<div class="container my-2">
+
+<h1>Add Reply</h1>
+<br></br>
+<div class="form-group">
+    <form method="POST" >
+        {% csrf_token %}
+        {{ form.as_p }} 
+        <button type="submit" class="btn btn-secondary">Add Reply</button>
+</div>
+
+<script>
+    var name = "{{ user.id }}";
+    document.getElementById("User").value = name;
+
+</script>
+
+</div>
+{% endblock %}

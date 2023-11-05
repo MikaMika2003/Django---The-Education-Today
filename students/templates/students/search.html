@@ -1,0 +1,32 @@
+{% extends "students/base.html" %}
+
+
+
+{% block content %}
+    <center>
+        {% if searched %}
+        <br/>
+        <h1>You Searched For {{ searched }}</h1>
+        <br/>
+            {% for result in results %}
+                <a href="{% url 'students:article-detail' result.pk %}">{{ result }} - Post </a>
+                <br/>
+
+            {% endfor %}
+
+            {% for quiz in quizzes %}
+            <a href="{% url 'students:quiz_view' quiz.id %}">{{ quiz }} - Quiz </a>
+            <br/>
+
+            {% endfor %}
+
+
+        {% else %}
+            <h1>Hey! You forgot to search for something...</h1>
+
+        {% endif %}
+
+
+    </center>
+{% endblock %}
+

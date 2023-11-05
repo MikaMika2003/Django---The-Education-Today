@@ -1,0 +1,74 @@
+{% extends "teachers/base.html" %}
+{% load static %}
+
+<title>
+    {% block title %}
+        Quizzes
+    {% endblock %}
+</title>
+
+{% block content %}
+
+<div class="container my-2">
+    <div id="coursediv">
+        <div id="grades-wrapper">
+            <br/>
+            <h2> Grades: </h2>
+
+        </div>
+
+            <div class="card-columns" style="padding: 10px; margin: 20px;">
+                <div class="card" align="centre " style="width: 32rem; border:5px black solid">
+                    <div class="card-body">
+
+                        <div class="container text-left.">
+                            <div class="row">
+                            <div class="col">
+                                <strong>Students</strong>
+                            </div>
+                            <div class="col">
+                                
+                                <strong>Usernames</strong>
+                            </div>
+                            <div class="col">
+                                <strong>Grades</strong>
+                            </div>
+                            </div>
+                
+                            {% for grade in grades %}
+                            <div class="row">
+                            <div class="col">
+                                {{grade.student.first_name}} {{grade.student.last_name}}
+                            </div>
+                            <div class="col">
+                                {{grade.student.username}}
+                            </div>
+                            <div class="col">
+                                {{grade.grade}}%
+                            </div>
+                            </div>
+                            {% endfor %}
+                
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+    <hr>
+    </div>
+    <br/>
+    <div id="contentwrapper">
+        <div id="content">
+            <div id="tagwrapper">
+                <h2>Quiz Name: {{quiz.title}}</h2> 
+                <br/>
+                <a class="tags" href="{% url 'teachers:quiz_view' quiz.id %}">View and Add Questions</a>
+                <br/><br/>
+            </div>    
+        </div>
+    </div>
+    <br/>
+
+</div>
+
+{% endblock %}

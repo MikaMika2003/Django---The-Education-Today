@@ -1,0 +1,26 @@
+{% extends "students/base.html" %}
+
+<title>
+    {% block title %}
+        Edit Profile
+    {% endblock %}
+</title>
+
+
+{% block content %}
+<br/>
+<div class="container my-2">
+<h1>Edit Profile</h1>
+<br/><br/>
+
+<div class="form-group">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-secondary">Update Profile</button>
+        <br/><br/>
+        <a class="btn btn-secondary" href="{% url 'students:change_password' %}" role="button">Change Password</a>
+</div>    
+
+</div>
+{% endblock %}

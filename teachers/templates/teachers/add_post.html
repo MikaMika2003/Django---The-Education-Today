@@ -1,0 +1,30 @@
+{% extends "teachers/base.html" %}
+
+<title>
+    {% block title %}
+        Create A New Post
+    {% endblock %}
+</title>
+
+{% block content %}
+<br/>
+<div class="container my-2">
+
+<h1>Add Post</h1>
+<br></br>
+<div class="form-group">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }} 
+        {{ form.as_p }} 
+        <button type="submit" class="btn btn-secondary">Post</button>
+</div>
+
+<script>
+    var name = "{{ user.id }}";
+    document.getElementById("User").value = name;
+
+</script>
+
+</div>
+{% endblock %}

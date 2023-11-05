@@ -26,20 +26,16 @@
                                         <p class="card-text">{{ message }}</p>
                                     {% endfor %}
 
-                                    <h3>You have 0 attemps left.</h3>
+                                    {% with max_attempts=3 %}
+                                        <h3>You have {{ max_attempts - grade.attempts }} attempt(s) left.</h3>
+                                    {% endwith %}
+
                                 </div>
                             </div>
                         </div>
                     
                     </div>
 
-
-
-                    <!--<h2>Your Grade for {{ quiz.title}}: <br>
-                        {{grade.grade}}%
-                        <br/>
-                        You have 0 attemps left.
-                    </h2>-->
                 </div>
             {% else %}
                 <div id="wrapper">

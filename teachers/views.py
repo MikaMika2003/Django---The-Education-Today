@@ -42,7 +42,7 @@ def course_detail(request, course_id):
     course = Course.objects.get(id=course_id)
     teacher = request.user
 
-    is_enrolled = Course.objects.filter(teacher=teacher, course=course)
+    is_enrolled = Course.objects.filter(teacher=teacher, name=course)
 
     if is_enrolled:
         # Retrieve content related to the course

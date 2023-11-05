@@ -178,6 +178,10 @@ def quizView(request, id):
     questions = Question.objects.filter(quiz=quiz)
     try:
         grade = Grade.objects.get(quiz=quiz, student=request.user)
+        if grade.attempts >= 3:
+            # Redirect or display a message to inform the user
+            return redirect(reverse('students:quiz_list'))
+
     except ObjectDoesNotExist:
         grade = None
     
@@ -192,7 +196,10 @@ def quizView(request, id):
             else:
                 wrong += 1
         total = correct/total_questions * 100
-        Grade.objects.create(grade = total, quiz=quiz, student=request.user)
+        grade = Grade.objects.create(grade = total, quiz=quiz, student=request.user)
+        if quiz.highest_grade is None or total > quiz.highest_grade:
+            quiz.highest_grade = total
+            grade.save()
 
         messages.success(request, f'Correct: {correct}')
         messages.success(request, f'Wrong: {wrong}')
@@ -201,5 +208,4 @@ def quizView(request, id):
     
     context = {"questions":questions, "quiz":quiz, "grade":grade}
 
-    
     return render(request, "students/quiz_view.html", context)

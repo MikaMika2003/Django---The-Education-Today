@@ -9,14 +9,6 @@ from teachers.models import *
 
 # Create your models here.
 
-class CustomUser2(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    #is_teacher = models.Che(max_length=10)
-
-
-    def __str__(self):
-        return str(self.user)
-
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -62,8 +54,4 @@ class Replies(models.Model):
     def __str__(self):
         return '%s - %s' % (self.post.title, self.name)
     
-'''class PostFile(models.Model):
-    post = models.ForeignKey(Posts, on_delete=models.CASCADE)
-    file = models.FileField(upload_to='documents/', null=True)'''
-
 

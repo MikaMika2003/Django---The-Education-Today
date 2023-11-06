@@ -2,7 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
-from account.models import Account, CustomUser2, Posts, Replies
+from account.models import Account, Posts, Replies
 
 from django.contrib.auth.models import User
 

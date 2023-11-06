@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Quizzes</h5>
                         <p class="card-text">A way to boost your grade!!</p>
-                        <a href="{% url 'teachers:quiz_list' %}" class="btn btn-secondary">View Quizzes</a>
+                        <a href="{% url 'teachers:quiz_list' course_id=course.id %}" class="btn btn-secondary">View Quizzes</a>
                     </div>
                 </div>
             </div>

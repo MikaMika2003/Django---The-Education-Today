@@ -26,7 +26,7 @@ urlpatterns = [
     path('password_success', views.password_success, name="password_success"),
 
     # Quiz and lessons
-    path("quiz_list/", views.quizList, name="quiz_list"),
+    path("quiz_list/<int:course_id>/", views.quizList, name="quiz_list"),
     path("quiz_view/<str:id>/", views.quizView, name="quiz_view"),
     path('grades/<int:grade_id>/', views.grades, name="grades"),
 

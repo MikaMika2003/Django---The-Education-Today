@@ -163,14 +163,16 @@ def password_success(request):
     return render(request, 'students/password_success.html', {})
 
 
-def quizList(request):
-    quizzes = Quiz.objects.order_by('-date_added')
+def quizList(request, course_id):
+    course = Course.objects.get(pk=course_id)
+    quizzes = Quiz.objects.filter(course=course).order_by('-date_added')
+
     if request.method == 'POST':
         title = request.POST.get('title')
-        Quiz.objects.create(title = title, author=request.user)
-        return redirect(reverse('students:quiz_list'))
+        Quiz.objects.create(title = title, author=request.user, course=course)
+        return redirect(reverse('students:quiz_list', args=[course_id]))
         
-    context = {'quizzes': quizzes}
+    context = {'quizzes': quizzes, 'course': course}
     return render(request, "students/quiz_list.html", context)
 
 

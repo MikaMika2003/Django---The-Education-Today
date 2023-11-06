@@ -27,7 +27,7 @@ urlpatterns = [
 
     # Quizzes and lessons
     path('quizzes/<str:id>/', views.quiz, name="quizzes"),
-    path('quiz_list/', views.quizList, name="quiz_list"),
+    path('quiz_list/<int:course_id>/', views.quizList, name="quiz_list"),
     path("quiz_view/<str:id>/", views.quizView, name="quiz_view"),
     #path("delete_quiz/<str:id>/", views.deleteQuiz, name="delete_quiz"),
     #path('videos/', views.videos, name="videos"),

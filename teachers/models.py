@@ -52,7 +52,7 @@ class Grade(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     grade = models.DecimalField(max_digits=5, decimal_places=2)
     attempts = models.PositiveIntegerField(default=0)
-    highest_grade = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    date_added = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
         return self.quiz.title    

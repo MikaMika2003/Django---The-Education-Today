@@ -12,7 +12,7 @@
     <div id="contentwrapper">
         <div id="content">
         
-            {% if grade %}
+            {% if grade and remaining_attempts == 0 %}
                 <div id="grade-wrapper">
                     <div class="container ">
             
@@ -27,7 +27,7 @@
                                     {% endfor %}
 
                                     {% with max_attempts=3 %}
-                                        <h3>You have {{ max_attempts - grade.attempts }} attempt(s) left.</h3>
+                                        <h3>You have {{ remaining_attempts }} attempt(s) left.</h3>
                                     {% endwith %}
 
                                 </div>

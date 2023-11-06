@@ -1,0 +1,32 @@
+{% extends 'students/base.html' %}
+
+<title>
+    {% block title %}
+        Grades
+    {% endblock %}
+</title>
+
+{% block content %}
+
+<div class="container my-2">
+    <div id="contentwrapper">
+        <div id="content">
+        
+            <div class="container my-2">
+                <div id="contentwrapper">
+                    <div id="content">
+                        <h2>Grade Detail</h2>
+                        <div id="grades">
+                            <p>Quiz Title: {{ grade.quiz.title }}</p>
+                            <p>Percentage: {{ grade.grade }}%</p>
+                            <p>Attempts: {{ grade.attempts }}/{{ max_attempts }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -12,17 +12,15 @@ urlpatterns = [
     path('', views.students_home, name="main"),
 
     # Posts
-    path('article/<int:posts_id>/', ArticlePage.as_view(), name="article-detail"),
-    #path('article/<uuid:pk>/', ArticlePage.as_view(), name="article-detail"),
+    path('article/<int:pk>/', views.ArticlePage.as_view(), name="article-detail"),
     path('courses/<int:course_id>/posts/', PostsPage.as_view(), name="posts"),
     path('courses/<int:course_id>/add_post/', AddPostPage.as_view(), name="add_post"),
     path('article/edit/<int:pk>', UpdatePostPage.as_view(), name="update_post"),
-    #path('add_post/', views.add_post, name="add_post"),
     path('article/<int:pk>/remove', DeletePostPage.as_view(), name="delete_post"),
     path('article/<int:pk>/add_reply/', AddReplyPage.as_view(), name="add_reply"),
 
-    #re_path(r'^article/(?P<pk>[\w-]+)/$', views.ArticlePage.as_view(), name="article-detail"),
-
+    
+    # User and passwords
     path('edit_profile/', UserEditPage.as_view(), name="edit_profile"),
     path('password/', PasswordsChangePage.as_view(), name="change_password"),
     path('password_success', views.password_success, name="password_success"),
@@ -30,6 +28,7 @@ urlpatterns = [
     # Quiz and lessons
     path("quiz_list/", views.quizList, name="quiz_list"),
     path("quiz_view/<str:id>/", views.quizView, name="quiz_view"),
+    path('grades/<int:grade_id>/', views.grades, name="grades"),
 
     #Courses
     path('courses/', views.courses, name="courses"),

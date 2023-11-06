@@ -17,6 +17,7 @@
         {% csrf_token %}
         {{ form.media }} 
         {{ form.as_p }} 
+        <input type="hidden" name="course_id" value="{{ course.id }}">
         <button type="submit" class="btn btn-secondary">Post</button>
 </div>
 

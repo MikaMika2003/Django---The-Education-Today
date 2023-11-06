@@ -13,7 +13,7 @@ urlpatterns = [
     path('', views.teachers_home, name="main"),
 
     # Posts
-    path('article/<int:pk>/', ArticlePage.as_view(), name="article-detail"),
+    path('article/<int:pk>/', views.ArticlePage.as_view(), name="article-detail"),
     path('courses/<int:course_id>/posts/', PostsPage.as_view(), name="posts"),
     path('courses/<int:course_id>/add_post/', AddPostPage.as_view(), name="add_post"),
     path('article/edit/<int:pk>', UpdatePostPage.as_view(), name="update_post"),

@@ -107,7 +107,6 @@ class AddPostPage(LoginRequiredMixin, CreateView):
     template_name = 'teachers/add_post.html'
     login_url = '/signin/' 
     redirect_field_name = 'next'
-    success_url = reverse_lazy('teachers:posts')
 
     def form_valid(self, form):
         course_id = self.kwargs.get('course_id')

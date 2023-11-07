@@ -14,6 +14,8 @@
         <div class="form-wrapper">
             <form action="" method="POST" enctype="multipart/form-data" >
                 {% csrf_token %}
+                <a href="{% url 'teachers:quizzes' quiz.id %}" class="btn btn-secondary">Return to Students Grade Page</a>
+                <hr>
                 <label for="message" class="textarea-label"> Add Question</label>
                 
                 <div class="textarea">

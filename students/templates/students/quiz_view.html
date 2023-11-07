@@ -39,10 +39,19 @@
                 </div>
             {% else %}
                 <div id="wrapper">
+                    <br/>
                     <h2>{{quiz.title}}</h2>
+                    <hr>
                     <div id="quiz-wrapper">
                         <form id="form" method="post">
                             {% csrf_token %}
+
+                            <h6> You have {{ remaining_attempts }} attempt(s) left.</h6>
+                            {% if remaining_attempts != 3 %}
+                                <h6> Your current grade is {{ grade.grade }}%</h6>
+                            {% endif %}
+                            
+                            <hr>
                             {% for question in questions %}
                             <div class="questions">
                                 <h3>Question {{ forloop.counter }}</h3>

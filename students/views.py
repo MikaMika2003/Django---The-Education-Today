@@ -19,10 +19,16 @@ def search(request):
     if request.method == 'POST':
         searched = request.POST['searched']
 
-        results = Posts.objects.filter(title__contains=searched)
+        posts = Posts.objects.filter(title__contains=searched)
         quizzes = Quiz.objects.filter(title__contains=searched)
+        posts_body = Posts.objects.filter(body__contains=searched)
+        posts_snippet = Posts.objects.filter(snippet__contains=searched)
 
-        return render(request, 'students/search.html', {'searched': searched, 'results': results, 'quizzes': quizzes})
+        course_name = Course.objects.filter(subject_name__contains=searched)
+
+        context = {'searched': searched, 'posts': posts, 'quizzes': quizzes, 'posts_body': posts_body, 'posts_snippet': posts_snippet, 'course_name': course_name}
+
+        return render(request, 'students/search.html', context)
     else:
         return render(request, 'students/search.html', {})
 
@@ -209,13 +215,13 @@ def quizView(request, id):
         if grade is None:
             Grade.objects.create(grade=total, quiz=quiz, student=request.user, attempts=1)
         else:
-
+            # Only update the grade if the new grade is higher
+            if total > grade.grade:
+                grade.grade = total
             grade.attempts += 1
             grade.save()
-        
 
-        #messages.success(request, f'Correct: {correct}')
-        #messages.success(request, f'Wrong: {wrong}')
+        
 
         return redirect(reverse('students:quiz_view', args=[id]))
 

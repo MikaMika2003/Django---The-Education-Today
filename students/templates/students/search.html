@@ -7,18 +7,42 @@
         {% if searched %}
         <br/>
         <h1>You Searched For {{ searched }}</h1>
-        <br/>
-            {% for result in results %}
-                <a href="{% url 'students:article-detail' result.pk %}">{{ result }} - Post </a>
+        <hr>
+            {% for post in posts %}
+                <a href="{% url 'students:article-detail' post.pk %}">{{ post }}</a> | Post
                 <br/>
+                <hr>
 
             {% endfor %}
 
             {% for quiz in quizzes %}
-            <a href="{% url 'students:quiz_view' quiz.id %}">{{ quiz }} - Quiz </a>
+            <a href="{% url 'students:quiz_view' quiz.id %}">{{ quiz }}</a> | Quiz
             <br/>
+            <hr>
 
             {% endfor %}
+
+            {% for body in posts_body %}
+            <a href="{% url 'students:article-detail' body.pk %}">{{ body }}</a> | Post
+            <br/>
+            <hr>
+
+            {% endfor %}
+
+            {% for snippet in posts_snippet %}
+            <a href="{% url 'students:article-detail' snippet.pk %}">{{ snippet }}</a> | Post
+            <br/>
+            <hr>
+
+            {% endfor %}
+            
+            {% for course in course_name %}
+            <a href="{% url 'students:course_detail' course.id %}">{{ course }}</a> | Course
+            <br/>
+            <hr>
+
+            {% endfor %}
+
 
 
         {% else %}

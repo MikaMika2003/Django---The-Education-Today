@@ -17,10 +17,15 @@ def search(request):
     if request.method == 'POST':
         searched = request.POST['searched']
 
-        results = Posts.objects.filter(title__contains=searched)
+        posts = Posts.objects.filter(title__contains=searched)
         quizzes = Quiz.objects.filter(title__contains=searched)
+        posts_body = Posts.objects.filter(body__contains=searched)
+        posts_snippet = Posts.objects.filter(snippet__contains=searched)
 
-        return render(request, 'teachers/search.html', {'searched': searched, 'results': results, 'quizzes': quizzes})
+        course_name = Course.objects.filter(subject_name__contains=searched)
+
+        context = {'searched': searched, 'posts': posts, 'quizzes': quizzes, 'posts_body': posts_body, 'posts_snippet': posts_snippet, 'course_name': course_name}
+        return render(request, 'teachers/search.html', context)
     else:                        
         return render(request, 'teachers/search.html', {})
     
@@ -177,7 +182,8 @@ def quizList(request, course_id):
 def quiz(request, id):
     quiz = Quiz.objects.get(pk=id)
     grades = Grade.objects.filter(quiz=quiz)
-    context = {"quiz":quiz, "grades":grades}
+    course = Course.objects.get(id=id)
+    context = {"quiz":quiz, "grades":grades, "course": course}
     return render(request, "teachers/quizzes.html", context)
 
 def quizView(request, id):

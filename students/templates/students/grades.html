@@ -14,12 +14,13 @@
         
             <div class="container my-2">
                 <div id="contentwrapper">
-                    <div id="content">
+                    <div id="content"><br/>
                         <h2>Grade Detail</h2>
+                        <hr>
                         <div id="grades">
                             <p>Quiz Title: {{ grade.quiz.title }}</p>
                             <p>Percentage: {{ grade.grade }}%</p>
-                            <p>Attempts: {{ grade.attempts }}/{{ max_attempts }}</p>
+                            <p>You have 0 attempts left.</p>
                         </div>
                     </div>
                 </div>

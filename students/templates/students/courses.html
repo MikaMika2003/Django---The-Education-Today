@@ -17,7 +17,7 @@
         <strong><a href="{% url 'students:course_detail' student_course.course.id %}">{{ student_course.course.name }}</a></strong> - 
         {{ student_course.course.subject_name }}
         <br/>
-        <strong>Instructor:</strong> {{ student_course.course.teacher }}
+        <strong>Instructor:</strong> {{ student_course.course.teacher.first_name }} {{ student_course.course.teacher.last_name }}
         <br/>
         <hr>
 

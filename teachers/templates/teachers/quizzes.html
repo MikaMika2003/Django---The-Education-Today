@@ -16,9 +16,27 @@
             <h2> Grades: </h2>
 
         </div>
+        <br/>
+            <!-- Sorting buttons -->
+            <div>
+                <button onclick="sortScores('asc')">Sort Ascending</button>
+                <button onclick="sortScores('desc')">Sort Descending</button>
+                
+            </div>
+            <br/>
+            <div>
+                <strong>Highest Score:</strong> {{ highest_score }}%
+            </div>
+            <div>
+                <strong>Lowest Score:</strong> {{ lowest_score }}%
+            </div>
+            <div>
+                <strong>Average Score:</strong> {{ average_score }}%
+            </div>
+            <br/>
 
             <div class="card-columns" style="padding: 10px; margin: 20px;">
-                <div class="card" align="centre " style="width: 32rem; border:5px black solid">
+                <div class="card" align="centre " style="width: 50rem; border:5px black solid">
                     <div class="card-body">
 
                         <div class="container text-left.">
@@ -33,6 +51,12 @@
                             <div class="col">
                                 <strong>Grades</strong>
                             </div>
+                            <div class="col">
+                                <strong>Letter Grade</strong>
+                            </div>
+                            <div class="col">
+                                <strong>Attempt(s)</strong>
+                            </div>
                             </div>
                 
                             {% for grade in grades %}
@@ -45,6 +69,24 @@
                             </div>
                             <div class="col">
                                 {{grade.grade}}%
+                            </div>
+                            <div class="col">
+                                
+                                {% if grade.grade >= 90 %}
+                                    A 
+                                {% elif grade.grade >= 80 %}
+                                    B
+                                {% elif grade.grade >= 70 %}
+                                    C
+                                {% elif grade.grade >= 60 %}
+                                    D
+                                {% else %}
+                                    F
+
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {{grade.attempts}}
                             </div>
                             </div>
                             {% endfor %}
@@ -71,5 +113,29 @@
     <br/>
 
 </div>
+<script>
+    function sortScores(option) {
+
+        console.log('Sorting option:', option);
+        
+        // Get the current URL
+        let currentUrl = window.location.href;
+
+        // Check if there is already a 'sort' parameter in the URL
+        let hasSortParam = currentUrl.includes('sort=');
+
+        // Construct the new URL with the sorting option
+        let newUrl;
+        if (hasSortParam) {
+            newUrl = currentUrl.replace(/sort=(asc|desc|highest|lowest|average)/, 'sort=' + option);
+        } else {
+            newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'sort=' + option;
+        }
+
+        // Redirect to the new URL
+        window.location.href = newUrl;
+    }
+</script>
 
 {% endblock %}
+

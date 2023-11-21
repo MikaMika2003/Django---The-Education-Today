@@ -29,12 +29,12 @@
 
             {% endfor %}
 
-            {% for snippet in posts_snippet %}
+            <!--{% for snippet in posts_snippet %}
             <a href="{% url 'students:article-detail' snippet.pk %}">{{ snippet }}</a> | Post
             <br/>
             <hr>
 
-            {% endfor %}
+            {% endfor %}-->
             
             {% for course in course_name %}
             <a href="{% url 'students:course_detail' course.id %}">{{ course }}</a> | Course
@@ -46,6 +46,7 @@
 
 
         {% else %}
+        <br/>
             <h1>Hey! You forgot to search for something...</h1>
 
         {% endif %}

@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 
 from teachers.models import Course, Grade, Question, Quiz, Student_Course
+from django.db.models import Avg, Max, Min
 
 # Create your views here.
 
@@ -21,10 +22,10 @@ def search(request):
         quizzes = Quiz.objects.filter(title__contains=searched)
         posts_body = Posts.objects.filter(body__contains=searched)
         posts_snippet = Posts.objects.filter(snippet__contains=searched)
-
         course_name = Course.objects.filter(subject_name__contains=searched)
 
         context = {'searched': searched, 'posts': posts, 'quizzes': quizzes, 'posts_body': posts_body, 'posts_snippet': posts_snippet, 'course_name': course_name}
+        
         return render(request, 'teachers/search.html', context)
     else:                        
         return render(request, 'teachers/search.html', {})
@@ -183,7 +184,30 @@ def quiz(request, id):
     quiz = Quiz.objects.get(pk=id)
     grades = Grade.objects.filter(quiz=quiz)
     course = Course.objects.get(id=id)
-    context = {"quiz":quiz, "grades":grades, "course": course}
+
+    # Calculate additional data for display
+    highest_score = grades.aggregate(Max('grade'))['grade__max']
+    lowest_score = grades.aggregate(Min('grade'))['grade__min']
+    average_score = grades.aggregate(Avg('grade'))['grade__avg']
+
+    # Sorting logic
+    sort_option = request.GET.get('sort', '')
+    if sort_option == 'asc':
+        sorted_grades = grades.order_by('grade')
+    elif sort_option == 'desc':
+        sorted_grades = grades.order_by('-grade')
+    else:
+        sorted_grades = grades
+    
+    context = {
+        "quiz": quiz,
+        "grades": sorted_grades,
+        "course": course,
+        "highest_score": highest_score,
+        "lowest_score": lowest_score,
+        "average_score": average_score,
+    }
+    #context = {"quiz":quiz, "grades":grades, "course": course}
     return render(request, "teachers/quizzes.html", context)
 
 def quizView(request, id):

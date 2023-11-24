@@ -37,7 +37,7 @@
                 <hr>
                 {% for quiz in quizzes %}
                 <div class="quizzes" data-class-id= "{{ quiz.id }}">
-                    <strong><a href="{% url 'teachers:quizzes' quiz.id %}">{{ quiz.title }}</a></strong> - {{ quiz.weight }} pts
+                    <strong><a href="{% url 'teachers:quizzes' quiz.id %}">{{ quiz.title }}</a></strong>
                     - {{ quiz.date_added }}
                 </div>
                 <hr>

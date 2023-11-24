@@ -253,6 +253,8 @@ def grades(request, course_id):
     course = Course.objects.get(pk=course_id)
     quizzes = Quiz.objects.filter(course=course).order_by('-date_added')
     grades = Grade.objects.filter(quiz__in=quizzes, student=request.user).order_by('quiz__date_added')
+    
+    
 
     overall_score = sum(grade.user_score for grade in grades)
     max_possible_score = sum(grade.max_score for grade in grades)

@@ -1,4 +1,5 @@
 from collections import Counter
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
@@ -6,12 +7,12 @@ from account.forms import PostForm, UpdatePostForm, EditProfileForm, AddReplyFor
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
-from account.models import Posts, Replies
+from account.models import Account, Posts, Replies
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 
 from teachers.models import Course, Grade, Question, Quiz, Student_Course
-from django.db.models import Avg, Max, Min
+from django.db.models import Avg, Max, Min, Q
 
 # Create your views here.
 
@@ -19,13 +20,29 @@ def search(request):
     if request.method == 'POST':
         searched = request.POST['searched']
 
+        # Search in the Account model for users
+        users = Account.objects.filter(
+            Q(username__icontains=searched) |  # Search by username
+            Q(first_name__icontains=searched) |  # Search by first name
+            Q(last_name__icontains=searched)  # Search by last name
+            # Add more fields as needed
+        )
+
         posts = Posts.objects.filter(title__contains=searched)
         quizzes = Quiz.objects.filter(title__contains=searched)
         posts_body = Posts.objects.filter(body__contains=searched)
         posts_snippet = Posts.objects.filter(snippet__contains=searched)
         course_name = Course.objects.filter(subject_name__contains=searched)
 
-        context = {'searched': searched, 'posts': posts, 'quizzes': quizzes, 'posts_body': posts_body, 'posts_snippet': posts_snippet, 'course_name': course_name}
+        context = {
+            'searched': searched, 
+            'posts': posts, 
+            'quizzes': quizzes, 
+            'posts_body': posts_body, 
+            'posts_snippet': posts_snippet, 
+            'course_name': course_name,
+            "users": users,
+            }
         
         return render(request, 'teachers/search.html', context)
     else:                        
@@ -182,9 +199,9 @@ def quizList(request, course_id):
     return render(request, "teachers/quiz_list.html", context)
 
 def quiz(request, id):
-    quiz = Quiz.objects.get(pk=id)
+    quiz = get_object_or_404(Quiz, pk=id)
     grades = Grade.objects.filter(quiz=quiz)
-    course = Course.objects.get(id=id)
+    course = quiz.course
     
 
     # Calculate additional data for display
@@ -228,10 +245,10 @@ def quizView(request, id):
         op3 = request.POST.get('op3')
         op4 = request.POST.get('op4')
         ans = request.POST.get('ans')
+        points = request.POST.get('points')
         Question.objects.create(
-            quiz=quiz, question_text=question, op1=op1, op2=op2, op3=op3, op4=op4, ans=ans
+            quiz=quiz, question_text=question, op1=op1, op2=op2, op3=op3, op4=op4, ans=ans, points=points,
         )
-
 
         return redirect(reverse('teachers:quiz_view', args=[id]))
     context = {"questions":questions, "quiz":quiz}

@@ -9,6 +9,11 @@
         <br/><br/>                                         
         <h1>You Searched For {{ searched }}</h1>
         <hr>
+            {% for user in users %}
+                {{ user.username }} - {{ user.first_name }} {{ user.last_name }} | Student
+                <br/>
+                <hr>
+            {% endfor %}
             {% for post in posts %}
                 <a href="{% url 'teachers:article-detail' post.pk %}">{{ post }}</a> | Post
                 <br/>

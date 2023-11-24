@@ -225,21 +225,35 @@ def quizView(request, id):
 
         return redirect(reverse('students:quiz_view', args=[id]))
 
-    if grade is not None and grade.attempts >= max_attempts:
+    '''if grade is not None and grade.attempts >= max_attempts:
         # Redirect or display a message to inform the user
-        return redirect(reverse('students:grades',  args=[grade.id])) # Redirect to the quiz list or another page
+        return redirect(reverse('students:quiz_list',  args=[grade.id])) # Redirect to the quiz list or another page'''
 
     remaining_attempts = max_attempts - (grade.attempts if grade else 0)
 
     context = {"questions": questions, "quiz": quiz, "grade": grade, "remaining_attempts": remaining_attempts}
     return render(request, "students/quiz_view.html", context)
 
+def grades(request, course_id):
+    course = Course.objects.get(pk=course_id)
+    quizzes = Quiz.objects.filter(course=course).order_by('-date_added')
+    grades = Grade.objects.filter(quiz__in=quizzes, student=request.user).order_by('quiz__date_added')
 
-def grades(request, grade_id):
+
+
+    context = {"course": course, "quizzes": quizzes, "grades": grades}
+    return render(request, "students/grades.html", context)
+
+def past_courses(request):
+
+    return render(request, "students/past_courses.html")
+
+'''def grades(request, grade_id):
     grade = Grade.objects.get(pk=grade_id)
     max_attempts = 3  # Set this to the maximum number of attempts allowed
 
+
     context = {"grade": grade, "max_attempts": max_attempts}
-    return render(request, "students/grades.html", context)
+    return render(request, "students/grades.html", context)'''
 
 

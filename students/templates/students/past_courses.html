@@ -1,0 +1,165 @@
+{% extends "students/base.html" %}
+
+<title>
+    {% block title %}
+        Past Courses
+    {% endblock %}
+</title>
+
+{% block content %}
+<br/>
+<div class="container my-2">
+
+    <h1>Past Courses</h1>
+    <br/><br/>
+
+    <head>
+        <!-- Load plotly.js into the DOM -->
+        <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+    </head>
+    
+    <body>
+        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+    </body>
+    <hr>
+
+    <h2>SPRING 2023</h2>
+
+    <strong class="text-primary">SOC 332 </strong> - Sociology III
+    <br/>
+    Score: 950/1000
+    <br/>
+    Final Grade: 95%
+    <br/><br/>
+    
+    <strong class="text-secondary">PS 100 </strong> - Intro to Criminal Justice
+    <br/>
+    Score: 900/1000
+    <br/>
+    Final Grade: 90%
+    <hr>
+
+    <h2>FALL 2022</h2>
+
+    <strong class="text-primary">CS 120</strong> - Problem Solving Computations
+    <br/>
+    Score: 850/1000
+    <br/>
+    Final Grade: 85%
+    <br/><br/>
+    
+    <strong class="text-secondary">MATH 222 </strong> - Trigonometry
+    <br/>
+    Score: 700/1000
+    <br/>
+    Final Grade: 70%
+    <hr>
+
+    <h2>SPRING 2022</h2>
+
+    <strong class="text-primary">PSY 100 </strong> - Intro to Psychology
+    <br/>
+    Score: 920/1000
+    <br/>
+    Final Grade: 92%
+    <br/><br/>
+    
+    <strong class="text-secondary">MUS 220 </strong> - Jazz Music
+    <br/>
+    Score: 1000/1000
+    <br/>
+    Final Grade: 100%
+    <hr>
+
+
+    <h2>FALL 2021</h2>
+    <strong class="text-primary">SOC 200 </strong> - Sociology II
+    <br/>
+    Score: 890/1000
+    <br/>
+    Final Grade: 89%
+    <br/><br/>
+    
+    <strong class="text-secondary">ENG 112 </strong> - Literature
+    <br/>
+    Score: 960/1000
+    <br/>
+    Final Grade: 96%
+    <br/><br/>
+
+    <strong class="text-success">CS 100 </strong> - Into to Computer Science
+    <br/>
+    Score: 780/1000
+    <br/>
+    Final Grade: 78%
+    <hr>
+
+
+    <h2>SPRING 2021</h2>
+    <strong class="text-primary">SOC 100 </strong> - Intro to Sociology
+    <br/>
+    Score: 850/1000
+    <br/>
+    Final Grade: 85%
+    <br/><br/>
+    
+    <strong class="text-secondary">MATH 102 </strong> - Algebra
+    <br/>
+    Score: 720/1000
+    <br/>
+    Final Grade: 72%
+    <hr>
+    
+
+</div>
+<script>
+    var trace1 = {
+        x: ['Spring 2021', 'Fall 2021', 'Spring 2022', 'Fall 2022', 'Spring 2023'],
+        y: [950, 850, 920, 890, 850],
+        type: 'bar',
+        name: 'First Course',
+        marker: {
+          color: 'rgb(49,130,189)',
+          opacity: 0.7,
+        }
+      };
+      
+      var trace2 = {
+        x: ['Spring 2021', 'Fall 2021', 'Spring 2022', 'Fall 2022', 'Spring 2023'],
+        y: [900, 700, 1000, 960, 720],
+        type: 'bar',
+        name: 'Second Course',
+        marker: {
+          color: 'rgb(204,204,204)',
+          opacity: 0.5
+        }
+      };
+
+      var trace3 = {
+        x: ['Spring 2021', 'Fall 2021', 'Spring 2022', 'Fall 2022', 'Spring 2023'],
+        y: [0, 0, 0, 780, 0, 0],
+        type: 'bar',
+        name: 'Third Course',
+        marker: {
+          color: 'rgb(0, 100, 0)',
+          opacity: 0.5
+        }
+      };
+      
+      var data = [trace1, trace2, trace3];
+      
+      var layout = {
+        title: 'Past Courses',
+        xaxis: {
+          tickangle: -45
+        },
+        barmode: 'group'
+      };
+      
+      Plotly.newPlot('myDiv', data, layout);
+      
+
+</script>
+
+
+{%endblock %}

@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser, User
 from django.urls import reverse
@@ -14,6 +13,7 @@ class Course(models.Model):
     subject_name = models.CharField(max_length=255, default="Intro to Art History") 
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    #semester = models.CharField(max_length=20, default="Fall 2023")
 
     def __str__(self):
         return self.name 
@@ -28,6 +28,7 @@ class Quiz(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
+    weight = models.IntegerField(default=100)
 
     def __str__(self):
         return self.title
@@ -42,6 +43,8 @@ class Question(models.Model):
     op3 = models.CharField(max_length=200,null=True)
     op4 = models.CharField(max_length=200,null=True)
     ans = models.IntegerField(choices=[(1, 'Option 1'), (2, 'Option 2'), (3, 'Option 3'), (4, 'Option 4')])
+    points = models.IntegerField(default=1)
+
     
     def __str__(self):
         return self.quiz.title

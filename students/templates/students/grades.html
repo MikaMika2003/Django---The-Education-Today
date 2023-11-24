@@ -15,13 +15,47 @@
             <div class="container my-2">
                 <div id="contentwrapper">
                     <div id="content"><br/>
-                        <h2>Grade Detail</h2>
-                        <hr>
-                        <div id="grades">
-                            <p>Quiz Title: {{ grade.quiz.title }}</p>
-                            <p>Percentage: {{ grade.grade }}%</p>
-                            <p>You have 0 attempts left.</p>
-                        </div>
+                        <h2>Grades for {{ course.name }}</h2>
+                        <br/>
+                        {% if grades %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Quiz Title</th>
+                                        <th>Grade (%)</th>
+                                        <th>Letter Grade</th>
+                                        <th>Attempt(s)</th>
+                                        <th>Date Completed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for grade in grades %}
+                                        <tr>
+                                            <td>{{ grade.quiz.title }}</td>
+                                            <td>{{ grade.grade }}</td>
+                                            <td> 
+                                                {% if grade.grade >= 90 %}
+                                                    A 
+                                                {% elif grade.grade >= 80 %}
+                                                    B
+                                                {% elif grade.grade >= 70 %}
+                                                    C
+                                                {% elif grade.grade >= 60 %}
+                                                    D
+                                                {% else %}
+                                                    F
+
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ grade.attempts }}</td>
+                                            <td>{{ grade.date_added }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>No grades available for this course.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

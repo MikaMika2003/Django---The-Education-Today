@@ -28,11 +28,15 @@ urlpatterns = [
     # Quiz and lessons
     path("quiz_list/<int:course_id>/", views.quizList, name="quiz_list"),
     path("quiz_view/<str:id>/", views.quizView, name="quiz_view"),
-    path('grades/<int:grade_id>/', views.grades, name="grades"),
+    #path('grades/<int:grade_id>/', views.grades, name="grades"),
 
     #Courses
     path('courses/', views.courses, name="courses"),
     path('courses/<int:course_id>/', views.course_detail, name="course_detail"), 
+
+    # Grades
+    path('courses/<int:course_id>/grades/', views.grades, name="grades"),
+    path('past_courses/', views.past_courses, name="past_courses"),
 
     #Search 
     path('search', views.search, name="search"),

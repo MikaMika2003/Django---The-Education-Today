@@ -184,6 +184,7 @@ def quiz(request, id):
     quiz = Quiz.objects.get(pk=id)
     grades = Grade.objects.filter(quiz=quiz)
     course = Course.objects.get(id=id)
+    
 
     # Calculate additional data for display
     highest_score = grades.aggregate(Max('grade'))['grade__max']
@@ -198,7 +199,7 @@ def quiz(request, id):
         sorted_grades = grades.order_by('-grade')
     else:
         sorted_grades = grades
-    
+        
     context = {
         "quiz": quiz,
         "grades": sorted_grades,
@@ -213,6 +214,7 @@ def quiz(request, id):
 def quizView(request, id):
     quiz = Quiz.objects.get(pk=id)
     questions = Question.objects.filter(quiz=quiz)
+
     if request.method == 'POST':
         question = request.POST.get('question_text')
         op1 = request.POST.get('op1')
@@ -223,6 +225,8 @@ def quizView(request, id):
         Question.objects.create(
             quiz=quiz, question_text=question, op1=op1, op2=op2, op3=op3, op4=op4, ans=ans
         )
+
+
         return redirect(reverse('teachers:quiz_view', args=[id]))
     context = {"questions":questions, "quiz":quiz}
     return render(request, "teachers/quiz_view.html", context)

@@ -7,6 +7,7 @@
 </title>
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="container my-2">
     <div id="contentwrapper">
@@ -17,6 +18,28 @@
                     <div id="content"><br/>
                         <h2>Grades for {{ course.name }}</h2>
                         <br/>
+                        <h5>Overall Grade for Course: {{ overall_grade }}%</h5>
+                        
+                        {% if overall_grade >= 90 %}
+                            <h5>Letter Grade: A</h5>
+                        {% elif overall_grade >= 80 %}
+                            <h5>Letter Grade: B</h5>
+                        {% elif overall_grade >= 70 %}
+                            <h5>Letter Grade: C</h5>
+                        {% elif overall_grade >= 60 %}
+                            <h5>Letter Grade: D</h5>
+                        {% else %}
+                            <h5>Letter Grade: F</h5>
+
+                        {% endif %}
+
+                        <h5>Score: {{ overall_score }}/{{ max_possible_score }}</h5>
+                        <br/>
+
+                        <!-- Add this canvas element for the pie chart -->
+                        <canvas id="letterGradeChart" width="400" height="400"></canvas>
+
+
                         {% if grades %}
                             <table class="table">
                                 <thead>
@@ -63,5 +86,22 @@
         </div>
     </div>
 </div>
+<script>
+    // JavaScript code for rendering the pie chart
+    var ctx = document.getElementById('letterGradeChart').getContext('2d');
+    var letterGradeCounts = {{ letter_grade_counts|safe }};
+    var data = Object.values(letterGradeCounts);
+    var labels = Object.keys(letterGradeCounts);
 
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: data,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800'], // Customize colors as needed
+            }],
+            labels: labels,
+        },
+    });
+</script>
 {% endblock %}

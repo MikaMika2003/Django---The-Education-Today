@@ -13,6 +13,7 @@ class Course(models.Model):
     subject_name = models.CharField(max_length=255, default="Intro to Art History") 
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    points = models.PositiveIntegerField(default=0)
     #semester = models.CharField(max_length=20, default="Fall 2023")
 
     def __str__(self):
@@ -54,10 +55,12 @@ class Grade(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     grade = models.DecimalField(max_digits=5, decimal_places=2)
+    user_score = models.PositiveIntegerField(default=0)
+    max_score = models.PositiveIntegerField(default=0)
     attempts = models.PositiveIntegerField(default=0)
     date_added = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
-        return self.quiz.title    
+        return self.quiz.title
     
 

@@ -8,6 +8,9 @@
 </title>
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
 
 <div class="container my-2">
     <div id="coursediv">
@@ -35,67 +38,48 @@
             </div>
             <br/>
 
-            <div class="card-columns" style="padding: 10px; margin: 20px;">
-                <div class="card" align="centre " style="width: 50rem; border:5px black solid">
-                    <div class="card-body">
+            <center><canvas id="letterGradeChart" width="500" height="500"></canvas></center>
+            <br/>
 
-                        <div class="container text-left.">
-                            <div class="row">
-                            <div class="col">
-                                <strong>Students</strong>
-                            </div>
-                            <div class="col">
-                                
-                                <strong>Usernames</strong>
-                            </div>
-                            <div class="col">
-                                <strong>Grades</strong>
-                            </div>
-                            <div class="col">
-                                <strong>Letter Grade</strong>
-                            </div>
-                            <div class="col">
-                                <strong>Attempt(s)</strong>
-                            </div>
-                            </div>
-                
-                            {% for grade in grades %}
-                            <div class="row">
-                            <div class="col">
-                                {{grade.student.first_name}} {{grade.student.last_name}}
-                            </div>
-                            <div class="col">
-                                {{grade.student.username}}
-                            </div>
-                            <div class="col">
-                                {{grade.grade}}%
-                            </div>
-                            <div class="col">
-                                
-                                {% if grade.grade >= 90 %}
-                                    A 
-                                {% elif grade.grade >= 80 %}
-                                    B
-                                {% elif grade.grade >= 70 %}
-                                    C
-                                {% elif grade.grade >= 60 %}
-                                    D
-                                {% else %}
-                                    F
+            {% if grades %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Grade (%)</th>
+                            <th>Score</th>
+                            <th>Letter Grade</th>
+                            <th>Attempt(s)</th>
+                            <th>Date Completed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for grade in grades %}
+                            <tr>
+                                <td>{{grade.student.first_name}} {{grade.student.last_name}}</td>
+                                <td>{{ grade.grade }}</td>
+                                <td>{{ grade.user_score }}/{{ grade.max_score }}</td>
+                                <td> 
+                                    {% if grade.grade >= 90 %}
+                                        A 
+                                    {% elif grade.grade >= 80 %}
+                                        B
+                                    {% elif grade.grade >= 70 %}
+                                        C
+                                    {% elif grade.grade >= 60 %}
+                                        D
+                                    {% else %}
+                                        F
+                                    {% endif %}
+                                </td>
+                                <td>{{ grade.attempts }}</td>
+                                <td>{{ grade.date_added }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
 
-                                {% endif %}
-                            </div>
-                            <div class="col">
-                                {{grade.attempts}}
-                            </div>
-                            </div>
-                            {% endfor %}
-                
-                        </div>
-            
-                    </div>
-                </div>
-            </div>
     <hr>
     </div>
     <br/>
@@ -135,7 +119,48 @@
         // Redirect to the new URL
         window.location.href = newUrl;
     }
+
+        // JavaScript code for rendering the pie chart
+    var ctx = document.getElementById('letterGradeChart').getContext('2d');
+    var letterGradeCounts = {{ letter_grade_counts|safe }};
+    var data = Object.values(letterGradeCounts);
+    var labels = Object.keys(letterGradeCounts);
+
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: data,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800'], // Customize colors as needed
+            }],
+            labels: labels,
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            aspectRatio: 1,
+            plugins: {
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        size: '14',
+                    },
+                    formatter: function (value, context) {
+                        var dataset = context.dataset;
+                        var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                            return previousValue + currentValue;
+                        });
+                        var currentValue = dataset.data[context.dataIndex];
+                        var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                        return percentage + '%';
+                    },
+                },
+            },
+        },
+    });
+
 </script>
+
 
 {% endblock %}
 

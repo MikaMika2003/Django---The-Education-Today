@@ -16,7 +16,7 @@
             <div id="posts-wrapper">
                 {% for quiz in quizzes %}
                 <div class="quizzes" data-class-id= "{{ quiz.id }}">
-                    <strong><a href="{% url 'students:quiz_view' quiz.id %}">{{ quiz.title }}</a></strong> 
+                    <strong><a href="{% url 'students:quiz_view' quiz.id %}">{{ quiz.title }}</a></strong>
                     - {{ quiz.date_added }}
                 </div>
                 <hr>

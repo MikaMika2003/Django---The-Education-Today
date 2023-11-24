@@ -1,3 +1,4 @@
+from collections import Counter
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
@@ -199,6 +200,10 @@ def quiz(request, id):
         sorted_grades = grades.order_by('-grade')
     else:
         sorted_grades = grades
+
+    # Calculate the counts of each letter grade
+    letter_grades = [get_letter_grade(grade.grade) for grade in grades]
+    letter_grade_counts = dict(Counter(letter_grades))
         
     context = {
         "quiz": quiz,
@@ -207,6 +212,7 @@ def quiz(request, id):
         "highest_score": highest_score,
         "lowest_score": lowest_score,
         "average_score": average_score,
+        "letter_grade_counts": letter_grade_counts,
     }
     #context = {"quiz":quiz, "grades":grades, "course": course}
     return render(request, "teachers/quizzes.html", context)
@@ -230,6 +236,18 @@ def quizView(request, id):
         return redirect(reverse('teachers:quiz_view', args=[id]))
     context = {"questions":questions, "quiz":quiz}
     return render(request, "teachers/quiz_view.html", context)
+
+def get_letter_grade(percentage):
+    if percentage >= 90:
+        return "A"
+    elif percentage >= 80:
+        return "B"
+    elif percentage >= 70:
+        return "C"
+    elif percentage >= 60:
+        return "D"
+    else:
+        return "F"
 
 '''def deleteQuiz(request, id):
     quiz = Quiz.objects.get(pk=id)

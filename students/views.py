@@ -1,3 +1,4 @@
+from collections import Counter
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -178,14 +179,16 @@ def quizList(request, course_id):
         Quiz.objects.create(title = title, author=request.user, course=course)
         return redirect(reverse('students:quiz_list', args=[course_id]))
         
-    context = {'quizzes': quizzes, 'course': course}
+    context = {'quizzes': quizzes, 'course': course, }
     return render(request, "students/quiz_list.html", context)
 
 
 def quizView(request, id):
     quiz = Quiz.objects.get(pk=id)
     questions = Question.objects.filter(quiz=quiz)
-    
+
+    max_score = sum(question.points for question in questions)
+
     # Retrieve the latest grade, if it exists
     try:
         grade = Grade.objects.filter(quiz=quiz, student=request.user).latest('date_added')
@@ -200,24 +203,33 @@ def quizView(request, id):
             grade.attempts = 0
             grade.save()
 
-        total_questions = len(questions)
+        score = 0  # Initialize the score variable outside the loop
         correct = 0
         wrong = 0
         for question in questions:
             selected_answer = int(request.POST.get(f"{question.id}"))
             if selected_answer == question.ans:
                 correct += 1
+                score += question.points
             else:
                 wrong += 1
-        total = correct / total_questions * 100
+        total = score / max_score * 100
+
+        # Calculate the user's total score
+        #score = sum(question.points for question in questions if selected_answer == question.ans)
+        #print(f" Score: {score}")
+        #total = score/max_score * 100
+
 
         # Update the attempts field and create a new Grade instance
         if grade is None:
-            Grade.objects.create(grade=total, quiz=quiz, student=request.user, attempts=1)
+            Grade.objects.create(grade=total, quiz=quiz, student=request.user, attempts=1, user_score=score)
         else:
             # Only update the grade if the new grade is higher
             if total > grade.grade:
                 grade.grade = total
+                grade.user_score = score
+                grade.max_score = max_score
             grade.attempts += 1
             grade.save()
 
@@ -225,13 +237,16 @@ def quizView(request, id):
 
         return redirect(reverse('students:quiz_view', args=[id]))
 
-    '''if grade is not None and grade.attempts >= max_attempts:
-        # Redirect or display a message to inform the user
-        return redirect(reverse('students:quiz_list',  args=[grade.id])) # Redirect to the quiz list or another page'''
 
     remaining_attempts = max_attempts - (grade.attempts if grade else 0)
 
-    context = {"questions": questions, "quiz": quiz, "grade": grade, "remaining_attempts": remaining_attempts}
+    context = {
+        "questions": questions, 
+        "quiz": quiz, 
+        "grade": grade, 
+        "remaining_attempts": remaining_attempts, 
+        "max_score": max_score,
+    }
     return render(request, "students/quiz_view.html", context)
 
 def grades(request, course_id):
@@ -239,10 +254,37 @@ def grades(request, course_id):
     quizzes = Quiz.objects.filter(course=course).order_by('-date_added')
     grades = Grade.objects.filter(quiz__in=quizzes, student=request.user).order_by('quiz__date_added')
 
+    overall_score = sum(grade.user_score for grade in grades)
+    max_possible_score = sum(grade.max_score for grade in grades)
 
+    overall_grade = (overall_score/max_possible_score)*100
 
-    context = {"course": course, "quizzes": quizzes, "grades": grades}
+    # Calculate the counts of each letter grade
+    letter_grades = [get_letter_grade(grade.grade) for grade in grades]
+    letter_grade_counts = dict(Counter(letter_grades))
+
+    context = {
+        "course": course, 
+        "quizzes": quizzes, 
+        "grades": grades,
+        "overall_score": overall_score,
+        "max_possible_score": max_possible_score,
+        "overall_grade": overall_grade,
+        "letter_grade_counts": letter_grade_counts,
+    }
     return render(request, "students/grades.html", context)
+
+def get_letter_grade(percentage):
+    if percentage >= 90:
+        return "A"
+    elif percentage >= 80:
+        return "B"
+    elif percentage >= 70:
+        return "C"
+    elif percentage >= 60:
+        return "D"
+    else:
+        return "F"
 
 def past_courses(request):
 

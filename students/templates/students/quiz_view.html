@@ -21,7 +21,7 @@
                                 <div class="card-body">
                     
                                     <p class="card-text">Percentage: {{ grade.grade }}%</p>
-                                    <p class="card-text">Score: {{ grade.user_score }}/{{ max_score }}</p>
+                                    <p class="card-text">Score: {{ grade.user_score }}/{{ quiz.weight }}</p>
 
                                     {% for message in messages %}
                                         <p class="card-text">{{ message }}</p>
@@ -48,9 +48,12 @@
                             {% csrf_token %}
 
                             <h6> You have {{ remaining_attempts }} attempt(s) left.</h6>
-                            {% if remaining_attempts != 3 %}
+                            {% if remaining_attempts == 3 %}
+                            <h6> Your current grade is 0%</h6>
+                            <h6> Your current score is 0/{{ quiz.weight }}</h6>
+                            {% else %}
                                 <h6> Your current grade is {{ grade.grade }}%</h6>
-                                <h6> Your current score is {{ grade.user_score }}/{{ max_score }}</h6>
+                                <h6> Your current score is {{ grade.user_score }}/{{ quiz.weight }}</h6>
                             {% endif %}
                             
                             <hr>

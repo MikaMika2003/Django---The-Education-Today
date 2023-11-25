@@ -34,7 +34,8 @@
 
                             {% endif %}
 
-                            <h5>Score: {{ overall_score }}/{{ max_possible_score }}</h5>
+                            <h5>Score: {{ overall_score }}/{{ max_score }}*</h5>
+                            <h5>Student Percentile: {{ student_percentile }}%</h5>
                             <br/>
 
                             <table class="table">
@@ -42,6 +43,7 @@
                                     <tr>
                                         <th>Quiz Title</th>
                                         <th>Grade (%)</th>
+                                        <th>Score</th>
                                         <th>Letter Grade</th>
                                         <th>Attempt(s)</th>
                                         <th>Date Completed</th>
@@ -52,6 +54,7 @@
                                         <tr>
                                             <td>{{ grade.quiz.title }}</td>
                                             <td>{{ grade.grade }}</td>
+                                            <td>{{ grade.user_score }}/{{ grade.quiz.weight }}</td>
                                             <td> 
                                                 {% if grade.grade >= 90 %}
                                                     A 
@@ -76,6 +79,8 @@
                             <p>No grades available for this course.</p>
                         {% endif %}
                     </div>
+                    <br/>
+                    <h6 class="text-warning">*Note: Untaken quizzes are reflected in the score.</h6>
                 </div>
             </div>
             

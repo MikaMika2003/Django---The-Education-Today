@@ -205,9 +205,9 @@ def quiz(request, id):
     
 
     # Calculate additional data for display
-    highest_score = grades.aggregate(Max('grade'))['grade__max']
-    lowest_score = grades.aggregate(Min('grade'))['grade__min']
-    average_score = grades.aggregate(Avg('grade'))['grade__avg']
+    highest_score = round(grades.aggregate(Max('grade'))['grade__max'], 2)
+    lowest_score = round(grades.aggregate(Min('grade'))['grade__min'],2)
+    average_score = round(grades.aggregate(Avg('grade'))['grade__avg'], 2)
 
     # Sorting logic
     sort_option = request.GET.get('sort', '')

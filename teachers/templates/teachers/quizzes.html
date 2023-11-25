@@ -16,29 +16,28 @@
     <div id="coursediv">
         <div id="grades-wrapper">
             <br/>
-            <h2> Grades: </h2>
-
+            <h2> Grades </h2>
+            <hr>
         </div>
-        <br/>
+            <div>
+                <strong>Highest Percentage:</strong> {{ highest_score }}%
+            </div>
+            <div>
+                <strong>Lowest Percentage:</strong> {{ lowest_score }}%
+            </div>
+            <div>
+                <strong>Average Percentage:</strong> {{ average_score }}%
+            </div>
+            <br/>
+
+            <center><canvas id="letterGradeChart" width="500" height="500"></canvas></center>
+            <br/>
             <!-- Sorting buttons -->
             <div>
                 <button onclick="sortScores('asc')">Sort Ascending</button>
                 <button onclick="sortScores('desc')">Sort Descending</button>
                 
             </div>
-            <br/>
-            <div>
-                <strong>Highest Score:</strong> {{ highest_score }}%
-            </div>
-            <div>
-                <strong>Lowest Score:</strong> {{ lowest_score }}%
-            </div>
-            <div>
-                <strong>Average Score:</strong> {{ average_score }}%
-            </div>
-            <br/>
-
-            <center><canvas id="letterGradeChart" width="500" height="500"></canvas></center>
             <br/>
 
             {% if grades %}
@@ -58,7 +57,7 @@
                             <tr>
                                 <td>{{grade.student.first_name}} {{grade.student.last_name}}</td>
                                 <td>{{ grade.grade }}</td>
-                                <td>{{ grade.user_score }}/{{ grade.max_score }}</td>
+                                <td>{{ grade.user_score }}/{{ quiz.weight }}</td>
                                 <td> 
                                     {% if grade.grade >= 90 %}
                                         A 
@@ -120,7 +119,7 @@
         window.location.href = newUrl;
     }
 
-        // JavaScript code for rendering the pie chart
+    // JavaScript code for rendering the pie chart
     var ctx = document.getElementById('letterGradeChart').getContext('2d');
     var letterGradeCounts = {{ letter_grade_counts|safe }};
     var data = Object.values(letterGradeCounts);
@@ -131,7 +130,7 @@
         data: {
             datasets: [{
                 data: data,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800'], // Customize colors as needed
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800'],
             }],
             labels: labels,
         },
@@ -146,12 +145,11 @@
                         size: '14',
                     },
                     formatter: function (value, context) {
-                        var dataset = context.dataset;
-                        var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
-                            return previousValue + currentValue;
-                        });
-                        var currentValue = dataset.data[context.dataIndex];
-                        var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                        // Calculate the percentage and round it to two decimal places
+                        var total = data.reduce(function (acc, val) {
+                            return acc + val;
+                        }, 0);
+                        var percentage = ((value / total) * 100).toFixed(2);
                         return percentage + '%';
                     },
                 },

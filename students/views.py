@@ -187,7 +187,9 @@ def quizView(request, id):
     quiz = Quiz.objects.get(pk=id)
     questions = Question.objects.filter(quiz=quiz)
 
+
     max_score = sum(question.points for question in questions)
+    
 
     # Retrieve the latest grade, if it exists
     try:
@@ -196,6 +198,8 @@ def quizView(request, id):
         grade = None
     
     max_attempts = 3
+    quiz.weight = max_score
+    quiz.save()
 
     if request.method == 'POST':
         if grade and grade.attempts >= max_attempts:
@@ -214,6 +218,7 @@ def quizView(request, id):
             else:
                 wrong += 1
         total = score / max_score * 100
+        print(f"max_possible_score: {max_score}")
 
         # Calculate the user's total score
         #score = sum(question.points for question in questions if selected_answer == question.ans)
@@ -229,7 +234,7 @@ def quizView(request, id):
             if total > grade.grade:
                 grade.grade = total
                 grade.user_score = score
-                grade.max_score = max_score
+                
             grade.attempts += 1
             grade.save()
 
@@ -254,12 +259,21 @@ def grades(request, course_id):
     quizzes = Quiz.objects.filter(course=course).order_by('-date_added')
     grades = Grade.objects.filter(quiz__in=quizzes, student=request.user).order_by('quiz__date_added')
     
-    
+    max_score = 0
+    for quiz in quizzes:
+        max_score += quiz.weight
+    print(f"max_score: {max_score}")
 
     overall_score = sum(grade.user_score for grade in grades)
-    max_possible_score = sum(grade.max_score for grade in grades)
+    #max_possible_score = sum(grade.max_score for grade in grades)
 
-    overall_grade = (overall_score/max_possible_score)*100
+    #overall_grade = (overall_score/max_possible_score)*100
+    overall_grade = round((overall_score/max_score)*100, 2)
+    print(f"overall percentage: {overall_grade}")
+
+    # Calculate the student's percentile
+    all_students_grades = [grade.grade for grade in Grade.objects.filter(quiz__in=quizzes).exclude(student=request.user)]
+    student_percentile = round(calculate_percentile(overall_grade, all_students_grades),2)
 
     # Calculate the counts of each letter grade
     letter_grades = [get_letter_grade(grade.grade) for grade in grades]
@@ -270,9 +284,11 @@ def grades(request, course_id):
         "quizzes": quizzes, 
         "grades": grades,
         "overall_score": overall_score,
-        "max_possible_score": max_possible_score,
+        #"max_possible_score": max_possible_score,
+        "max_score": max_score,
         "overall_grade": overall_grade,
         "letter_grade_counts": letter_grade_counts,
+        "student_percentile": student_percentile,
     }
     return render(request, "students/grades.html", context)
 
@@ -287,6 +303,13 @@ def get_letter_grade(percentage):
         return "D"
     else:
         return "F"
+    
+def calculate_percentile(value, data):
+    """
+    Calculate the percentile of a value in a dataset.
+    """
+    count_below = sum(1 for x in data if x <= value)
+    return (count_below / len(data)) * 100 if data else 0
 
 def past_courses(request):
 

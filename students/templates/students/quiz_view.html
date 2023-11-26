@@ -60,7 +60,7 @@
                             {% for question in questions %}
                             <div class="questions">
                                 <h3>Question {{ forloop.counter }}</h3>
-                                <p>{{ question.question_text }}</p>
+                                <p>{{ question.question_text }} - {{question.points}} pts</p>
                                 {% if question.op1 %}
                                     <label>
                                         <input type="radio" name="{{question.id}}" value="1"> {{ question.op1 }}

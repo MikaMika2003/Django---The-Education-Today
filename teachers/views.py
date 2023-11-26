@@ -66,6 +66,10 @@ def course_detail(request, course_id):
     course = Course.objects.get(id=course_id)
     teacher = request.user
 
+    students = Student_Course.objects.filter(course=course_id)
+    # Count the number of students
+    num_students = students.count()
+
     is_enrolled = Course.objects.filter(teacher=teacher, name=course)
 
     if is_enrolled:
@@ -76,7 +80,9 @@ def course_detail(request, course_id):
         return render(request, 'teachers/course_detail.html', {
             'course': course,
             'posts': posts,
-            'quizzes': quizzes
+            'quizzes': quizzes,
+            'students': students,
+            'num_students': num_students,
         })
     else:
         return render(request, 'teachers/course.html')
@@ -221,6 +227,7 @@ def quiz(request, id):
     # Calculate the counts of each letter grade
     letter_grades = [get_letter_grade(grade.grade) for grade in grades]
     letter_grade_counts = dict(Counter(letter_grades))
+    grade_count = grades.count()
         
     context = {
         "quiz": quiz,
@@ -230,6 +237,7 @@ def quiz(request, id):
         "lowest_score": lowest_score,
         "average_score": average_score,
         "letter_grade_counts": letter_grade_counts,
+        "grade_count": grade_count,
     }
     #context = {"quiz":quiz, "grades":grades, "course": course}
     return render(request, "teachers/quizzes.html", context)
@@ -246,9 +254,16 @@ def quizView(request, id):
         op4 = request.POST.get('op4')
         ans = request.POST.get('ans')
         points = request.POST.get('points')
+
+        print(f"Points: {points}")
+        quiz.weight += int(points)
+        quiz.save()
+
         Question.objects.create(
             quiz=quiz, question_text=question, op1=op1, op2=op2, op3=op3, op4=op4, ans=ans, points=points,
         )
+
+
 
         return redirect(reverse('teachers:quiz_view', args=[id]))
     context = {"questions":questions, "quiz":quiz}

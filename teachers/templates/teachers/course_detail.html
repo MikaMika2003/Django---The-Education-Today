@@ -47,6 +47,30 @@
             </div>-->
         </div>
     </section>
+
+    <hr>
+    <h2>Enrolled Students ({{num_students}})</h2>
+    <br/>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student_course in students %}
+                <tr>
+                    <td>{{ student_course.student.first_name }}</td>
+                    <td>{{ student_course.student.last_name }}</td>
+                    <td>{{ student_course.student.username }}</td>
+                    <td>{{ student_course.student.email }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 

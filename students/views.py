@@ -279,6 +279,8 @@ def grades(request, course_id):
     letter_grades = [get_letter_grade(grade.grade) for grade in grades]
     letter_grade_counts = dict(Counter(letter_grades))
 
+    grade_count = grades.count()
+
     context = {
         "course": course, 
         "quizzes": quizzes, 
@@ -289,6 +291,7 @@ def grades(request, course_id):
         "overall_grade": overall_grade,
         "letter_grade_counts": letter_grade_counts,
         "student_percentile": student_percentile,
+        "grade_count": grade_count,
     }
     return render(request, "students/grades.html", context)
 

@@ -31,6 +31,8 @@
             <br/>
 
             <center><canvas id="letterGradeChart" width="500" height="500"></canvas></center>
+            <center><h6>Pie Chart for Letter Grades</h6></center>
+            <center>{{ letter_grade_counts }}</center>
             <br/>
             <!-- Sorting buttons -->
             <div>
@@ -38,7 +40,11 @@
                 <button onclick="sortScores('desc')">Sort Descending</button>
                 
             </div>
+
             <br/>
+            <h3>Listed Grades ({{ grade_count }})</h3>
+            <br/>
+
 
             {% if grades %}
                 <table class="table">
@@ -145,12 +151,13 @@
                         size: '14',
                     },
                     formatter: function (value, context) {
-                        // Calculate the percentage and round it to two decimal places
-                        var total = data.reduce(function (acc, val) {
-                            return acc + val;
-                        }, 0);
-                        var percentage = ((value / total) * 100).toFixed(2);
-                        return percentage + '%';
+                        var dataset = context.dataset;
+                        var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                            return previousValue + currentValue;
+                        });
+                        var currentValue = dataset.data[context.dataIndex];
+                        var percentage = ((currentValue / total) * 100).toFixed(2); // Ensure two decimal places
+                        return percentage + '%'; // Include the percentage sign
                     },
                 },
             },

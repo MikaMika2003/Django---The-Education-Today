@@ -81,17 +81,18 @@
         <div id="contentwrapper">
             <div id="content">
                 <div id="wrapper">
-                    <h2>{{quiz.title}} Questions</h2>
+                    <h2>{{quiz.title}} Questions - {{ quiz.weight }} pts</h2>
+                    <br/>
                     <div id="quiz-wrapper">
                         <form method="post">
                             {% csrf_token %}
                             {% for question in questions %}
                                 <div class="questions">
                                     <h3>Question {{ forloop.counter }}</h3>
-                                    <p>{{ question.question_text }}</p>
+                                    <p>{{ question.question_text }} - {{ question.points }} pts </p>
                                     {% if question.op1 %}
                                         <label>
-                                            <input type="radio" name="answer" value="1"> {{ question.op1 }}
+                                            <input type="radio" name="answer" value="1"> {{ question.op1 }} 
                                         </label>
                                         <br>
                                     {% endif %}
